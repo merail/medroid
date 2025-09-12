@@ -62,5 +62,6 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(projects.design)
-    implementation(projects.info)
+    implementation(projects.info.api)
+    implementation(projects.info.impl)
 }

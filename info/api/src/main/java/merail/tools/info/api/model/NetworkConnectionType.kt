@@ -1,6 +1,6 @@
-package merail.tools.info
+package merail.tools.info.api.model
 
-internal enum class NetworkConnectionType(
+enum class NetworkConnectionType(
     val humanValue: String,
 ) {
     MOBILE("Mobile"),

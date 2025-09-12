@@ -1,18 +1,19 @@
-package merail.tools.info
+package merail.tools.info.impl.repository
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
+import merail.tools.info.api.INetworkDataInformer
+import merail.tools.info.api.model.NetworkConnectionType
 import javax.inject.Inject
 
 internal class NetworkDataInformer @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+): INetworkDataInformer {
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     private val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -52,20 +53,20 @@ internal class NetworkDataInformer @Inject constructor(
         }
     }
 
-    fun isConnected() = isConnectedValue
+    override fun isConnected() = isConnectedValue
 
-    fun getNetworkConnection() = networkConnectionValue
+    override fun getNetworkConnection() = networkConnectionValue
 
-    fun getIpAddress() = ipAddressValue
+    override fun getIpAddress() = ipAddressValue
 
-    fun startMonitoring() {
+    override fun startMonitoring() {
         val request = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()
         connectivityManager.registerNetworkCallback(request, networkCallback)
     }
 
-    fun stopMonitoring() {
+    override fun stopMonitoring() {
         connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 }

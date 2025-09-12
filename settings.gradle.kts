@@ -27,3 +27,5 @@ rootProject.name = "Medroid"
 include(":app")
 include(":design")
 include(":info")
+include(":info:api")
+include(":info:impl")

@@ -1,6 +1,6 @@
-package merail.tools.info
+package merail.tools.info.api.model
 
-internal enum class DensityQualifierType(
+enum class DensityQualifierType(
     val humanValue: String,
 ) {
     LDPI("Low"),

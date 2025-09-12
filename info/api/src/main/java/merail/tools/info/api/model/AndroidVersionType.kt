@@ -1,6 +1,6 @@
-package merail.tools.info
+package merail.tools.info.api.model
 
-internal enum class AndroidVersionType(
+enum class AndroidVersionType(
     val sdkValue: Int,
     val humanValue: String,
     val releaseValue: String,

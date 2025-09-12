@@ -14,6 +14,7 @@ navigation = "2.9.3"
 hiltNavigation = "1.2.0"
 
 serialization = "1.8.0"
+coroutines = "1.10.2"
 
 [libraries]
 #<editor-fold desc="androidx">
@@ -44,6 +45,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 
 #<editor-fold desc="kotlinx">
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 #</editor-fold>
 
 [plugins]

@@ -1,6 +1,5 @@
-package merail.tools.info
+package merail.tools.info.impl
 
-import android.R.attr.text
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,7 +47,7 @@ internal fun InfoScreen(
     ) {
         item {
             Text(
-                text = "Информация об\u00A0устройстве",
+                text = stringResource(R.string.info_title),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -81,10 +81,14 @@ private fun DisplayInfoBlock(
     viewModel: InfoViewModel,
 ) {
     ExpandableItem(
-        title = "Информация об экране",
+        title = stringResource(R.string.info_display_title),
     ) {
         Text(
-            text = "Разрешение (px): ${viewModel.displayWidth} x ${viewModel.displayHeight}",
+            text = stringResource(
+                R.string.info_resolution_px,
+                viewModel.displayWidth,
+                viewModel.displayHeight,
+            ),
             modifier = Modifier
                 .padding(
                     bottom = 8.dp,
@@ -93,7 +97,11 @@ private fun DisplayInfoBlock(
         )
 
         Text(
-            text = "Разрешение (dp): ${viewModel.displayWidthDpi} x ${viewModel.displayHeightDpi}",
+            text = stringResource(
+                R.string.info_resolution_dp,
+                viewModel.displayWidthDpi,
+                viewModel.displayHeightDpi,
+            ),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -102,7 +110,7 @@ private fun DisplayInfoBlock(
         )
 
         Text(
-            text = "Плотность: ${viewModel.displayDpi} dpi",
+            text = stringResource(R.string.Info_density, viewModel.displayDpi),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -111,7 +119,11 @@ private fun DisplayInfoBlock(
         )
 
         Text(
-            text = "Категория плотности: ${viewModel.displayDensityQualifier} (${viewModel.displayDensityQualifier.humanValue})",
+            text = stringResource(
+                R.string.info_density_qualifier,
+                viewModel.displayDensityQualifier,
+                viewModel.displayDensityQualifier.humanValue,
+            ),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -120,7 +132,7 @@ private fun DisplayInfoBlock(
         )
 
         Text(
-            text = "Частота обновления: ${viewModel.displayRefreshRate} Гц",
+            text = stringResource(R.string.info_refresh_rate, viewModel.displayRefreshRate),
             modifier = Modifier
                 .padding(
                     top = 8.dp,
@@ -135,10 +147,15 @@ private fun AndroidInfoBlock(
     viewModel: InfoViewModel,
 ) {
     ExpandableItem(
-        title = "Информация об ОС",
+        title = stringResource(R.string.info_os_title),
     ) {
         Text(
-            text = "Версия Android: Android ${viewModel.androidVersion.releaseValue} (${viewModel.androidVersion.humanValue}), SDK ${viewModel.androidVersion.sdkValue}",
+            text = stringResource(
+                R.string.info_android_version,
+                viewModel.androidVersion.releaseValue,
+                viewModel.androidVersion.humanValue,
+                viewModel.androidVersion.sdkValue,
+            ),
             modifier = Modifier
                 .padding(
                     bottom = 8.dp,
@@ -147,7 +164,7 @@ private fun AndroidInfoBlock(
         )
 
         Text(
-            text = "Security patch: ${viewModel.patchLevel}",
+            text = stringResource(R.string.info_security_patch, viewModel.patchLevel),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -156,7 +173,7 @@ private fun AndroidInfoBlock(
         )
 
         Text(
-            text = "Build ID: ${viewModel.buildId}",
+            text = stringResource(R.string.info_build_id, viewModel.buildId),
             modifier = Modifier
                 .padding(
                     top = 8.dp,
@@ -171,10 +188,10 @@ private fun DeviceInfoBlock(
     viewModel: InfoViewModel,
 ) {
     ExpandableItem(
-        title = "Информация об устройстве",
+        title = stringResource(R.string.info_device_title),
     ) {
         Text(
-            text = "Производитель: ${viewModel.manufacturer}",
+            text = stringResource(R.string.info_manufacturer, viewModel.manufacturer),
             modifier = Modifier
                 .padding(
                     bottom = 8.dp,
@@ -183,7 +200,7 @@ private fun DeviceInfoBlock(
         )
 
         Text(
-            text = "Модель: ${viewModel.model}",
+            text = stringResource(R.string.info_model, viewModel.model),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -192,7 +209,7 @@ private fun DeviceInfoBlock(
         )
 
         Text(
-            text = "Бренд: ${viewModel.brand}",
+            text = stringResource(R.string.info_brand, viewModel.brand),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -201,7 +218,7 @@ private fun DeviceInfoBlock(
         )
 
         Text(
-            text = "CPU ABI: ${viewModel.abis}",
+            text = stringResource(R.string.info_abis, viewModel.abis),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -210,7 +227,7 @@ private fun DeviceInfoBlock(
         )
 
         Text(
-            text = "Ядер CPU: ${viewModel.coresCount}",
+            text = stringResource(R.string.info_cores_count, viewModel.coresCount),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -219,7 +236,7 @@ private fun DeviceInfoBlock(
         )
 
         Text(
-            text = "RAM: ${viewModel.availableRam} Gb / ${viewModel.totalRam} Gb",
+            text = stringResource(R.string.info_ram, viewModel.availableRam, viewModel.totalRam),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -228,7 +245,11 @@ private fun DeviceInfoBlock(
         )
 
         Text(
-            text = "Storage: ${viewModel.availableStorage} Gb / ${viewModel.totalStorage} Gb",
+            text = stringResource(
+                R.string.info_storage,
+                viewModel.availableStorage,
+                viewModel.totalStorage,
+            ),
             modifier = Modifier
                 .padding(
                     top = 8.dp,
@@ -243,10 +264,17 @@ private fun NetworkInfoBlock(
     viewModel: InfoViewModel,
 ) {
     ExpandableItem(
-        title = "Информация о сети",
+        title = stringResource(R.string.info_network_title),
     ) {
         Text(
-            text = "Состояние интернета: ${if (viewModel.isConnected.collectAsState().value) "есть" else "нет"}",
+            text = stringResource(
+                R.string.info_network_state,
+                if (viewModel.isConnected.collectAsState().value) {
+                    stringResource(R.string.info_network_is_connected)
+                } else {
+                    stringResource(R.string.info_network_is_not_connected)
+                },
+            ),
             modifier = Modifier
                 .padding(
                     bottom = 8.dp,
@@ -255,7 +283,10 @@ private fun NetworkInfoBlock(
         )
 
         Text(
-            text = "Тип сети: ${viewModel.networkConnection.collectAsState().value.humanValue}",
+            text = stringResource(
+                R.string.info_network_type,
+                viewModel.networkConnection.collectAsState().value.humanValue,
+            ),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,
@@ -264,7 +295,10 @@ private fun NetworkInfoBlock(
         )
 
         Text(
-            text = "IP-адрес: ${viewModel.ipAddress.collectAsState().value}",
+            text = stringResource(
+                R.string.info_ip_address,
+                viewModel.ipAddress.collectAsState().value,
+            ),
             modifier = Modifier
                 .padding(
                     vertical = 8.dp,

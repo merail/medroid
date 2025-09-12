@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import merail.tools.info.InfoRoute
-import merail.tools.info.infoScreen
+import merail.tools.info.impl.InfoRoute
+import merail.tools.info.impl.infoScreen
 
 @Composable
 fun MedroidNavHost(

@@ -1,4 +1,4 @@
-package merail.tools.info
+package merail.tools.info.impl.repository
 
 import android.content.Context
 import android.hardware.display.DisplayManager
@@ -8,11 +8,13 @@ import android.view.Display
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import dagger.hilt.android.qualifiers.ApplicationContext
+import merail.tools.info.api.IDisplayDataInformer
+import merail.tools.info.api.model.DensityQualifierType
 import javax.inject.Inject
 
-internal class DisplayMetricsInformer @Inject constructor(
+internal class DisplayDataInformer @Inject constructor(
     @ApplicationContext context: Context,
-) {
+): IDisplayDataInformer {
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
     private val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
@@ -34,23 +36,23 @@ internal class DisplayMetricsInformer @Inject constructor(
 
     private val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
 
-    fun getDisplayWidth() = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+    override fun getDisplayWidth() = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
         windowBounds.width()
     } else {
         realMetrics.widthPixels
     }
 
-    fun getDisplayHeight() = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+    override fun getDisplayHeight() = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
         windowBounds.height()
     } else {
         realMetrics.heightPixels
     }
 
-    fun getDpi() = displayMetrics.densityDpi
+    override fun getDpi() = displayMetrics.densityDpi
 
-    fun getDensity() = displayMetrics.density
+    override fun getDensity() = displayMetrics.density
 
-    fun getDensityQualifier() = when (getDpi()) {
+    override fun getDensityQualifier() = when (getDpi()) {
         in 0..120 -> DensityQualifierType.LDPI
         in 121..160 -> DensityQualifierType.MDPI
         in 161..240 -> DensityQualifierType.HDPI
@@ -60,5 +62,5 @@ internal class DisplayMetricsInformer @Inject constructor(
         else -> DensityQualifierType.UNKNOWN
     }
 
-    fun getRefreshRate() = display.refreshRate
+    override fun getRefreshRate() = display.refreshRate
 }

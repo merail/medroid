@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "merail.tools.info"
+    namespace = "merail.tools.info.impl"
     compileSdk = 36
 
     defaultConfig {
@@ -43,4 +43,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(projects.info.api)
 }

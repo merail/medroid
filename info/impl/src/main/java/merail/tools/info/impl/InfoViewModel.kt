@@ -1,22 +1,24 @@
-package merail.tools.info
+package merail.tools.info.impl
 
-import android.net.NetworkCapabilities
-import android.os.Build
-import android.system.Os.stat
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import merail.tools.info.api.IDeviceDataInformer
+import merail.tools.info.api.IDisplayDataInformer
+import merail.tools.info.api.INetworkDataInformer
+import merail.tools.info.api.IOsDataInformer
+import merail.tools.info.api.model.NetworkConnectionType
 import javax.inject.Inject
 
 @HiltViewModel
 internal class InfoViewModel @Inject constructor(
-    displayMetricsInformer: DisplayMetricsInformer,
-    dataInformer: DeviceDataInformer,
-    private val networkDataInformer: NetworkDataInformer,
+    displayMetricsInformer: IDisplayDataInformer,
+    osDataInformer: IOsDataInformer,
+    deviceDataInformer: IDeviceDataInformer,
+    private val networkDataInformer: INetworkDataInformer,
 ) : ViewModel() {
 
     val displayWidth = displayMetricsInformer.getDisplayWidth()
@@ -24,35 +26,23 @@ internal class InfoViewModel @Inject constructor(
     val displayDpi = displayMetricsInformer.getDpi()
     val displayWidthDpi = (displayMetricsInformer.getDisplayWidth() / displayMetricsInformer.getDensity()).toInt()
     val displayHeightDpi = (displayMetricsInformer.getDisplayHeight() / displayMetricsInformer.getDensity()).toInt()
-    val displayDensityQualifier = displayMetricsInformer.getDensityQualifier()
+    val displayDensityQualifier =
+        displayMetricsInformer.getDensityQualifier()
     val displayRefreshRate = displayMetricsInformer.getRefreshRate().toInt()
 
-    val androidVersion = when(Build.VERSION.SDK_INT) {
-        36 -> AndroidVersionType.BAKLAVA
-        35 -> AndroidVersionType.VANILLA_ICE_CREAM
-        34 -> AndroidVersionType.UPSIDE_DOWN_CAKE
-        33 -> AndroidVersionType.TIRAMISU
-        32 -> AndroidVersionType.SNOW_CONE_32
-        31 -> AndroidVersionType.SNOW_CONE_31
-        30 -> AndroidVersionType.RED_VELVET_CAKE
-        29 -> AndroidVersionType.Q
-        28 -> AndroidVersionType.PIE
-        27 -> AndroidVersionType.OREO_27
-        26 -> AndroidVersionType.OREO_26
-        else -> AndroidVersionType.UNKNOWN
-    }
-    val patchLevel = Build.VERSION.SECURITY_PATCH
-    val buildId = Build.ID
+    val androidVersion = osDataInformer.getAndroidVersion()
+    val patchLevel = osDataInformer.getPatchLevel()
+    val buildId = osDataInformer.getBuildId()
 
-    val manufacturer = dataInformer.getManufacturer()
-    val model = dataInformer.getModel()
-    val brand = dataInformer.getBrand()
-    val abis = dataInformer.getAbis()
-    val coresCount = dataInformer.getCoresCount()
-    val availableRam = dataInformer.getAvailableRam()
-    val totalRam = dataInformer.getTotalRam()
-    val availableStorage = dataInformer.getAvailableStorage()
-    val totalStorage = dataInformer.getTotalStorage()
+    val manufacturer = deviceDataInformer.getManufacturer()
+    val model = deviceDataInformer.getModel()
+    val brand = deviceDataInformer.getBrand()
+    val abis = deviceDataInformer.getAbis()
+    val coresCount = deviceDataInformer.getCoresCount()
+    val availableRam = deviceDataInformer.getAvailableRam()
+    val totalRam = deviceDataInformer.getTotalRam()
+    val availableStorage = deviceDataInformer.getAvailableStorage()
+    val totalStorage = deviceDataInformer.getTotalStorage()
 
     private val _isConnected = MutableStateFlow(false)
     val isConnected: StateFlow<Boolean> = _isConnected
