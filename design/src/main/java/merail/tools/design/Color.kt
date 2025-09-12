@@ -1,4 +1,4 @@
-package merail.tools.medroid.ui.theme
+package merail.tools.design
 
 import androidx.compose.ui.graphics.Color
 

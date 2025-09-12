@@ -11,6 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -19,6 +20,10 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "medroid"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "Medroid"
+
 include(":app")
- 
+include(":design")
+include(":info")
