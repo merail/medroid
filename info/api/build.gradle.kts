@@ -22,8 +22,8 @@ android {
     kotlinOptions {
         jvmTarget = JvmTarget.JVM_17.target
     }
+}
 
-    dependencies {
-        implementation(libs.kotlinx.coroutines.core)
-    }
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
 }

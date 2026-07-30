@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import merail.tools.info.impl.InfoRoute
 import merail.tools.info.impl.infoScreen
+import merail.tools.packages.impl.PackagesRoute
+import merail.tools.packages.impl.packagesScreen
 
 @Composable
 fun MedroidNavHost(
@@ -13,8 +15,10 @@ fun MedroidNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = InfoRoute,
+        startDestination = PackagesRoute,
     ) {
         infoScreen()
+
+        packagesScreen()
     }
 }

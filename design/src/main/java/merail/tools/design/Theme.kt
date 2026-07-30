@@ -107,7 +107,7 @@ private val LightColorScheme = lightColorScheme(
 @androidx.compose.runtime.Composable
 fun MedroidTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @androidx.compose.runtime.Composable () -> Unit,
 ) {
     val colorScheme = when {

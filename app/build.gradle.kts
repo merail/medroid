@@ -64,4 +64,6 @@ dependencies {
     implementation(projects.design)
     implementation(projects.info.api)
     implementation(projects.info.impl)
+    implementation(projects.packages.api)
+    implementation(projects.packages.impl)
 }
