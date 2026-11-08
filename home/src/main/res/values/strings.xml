@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_title">Medroid</string>
+    <string name="home_info_title">Информация об устройстве</string>
+    <string name="home_info_description">Экран, ОС, железо и сеть</string>
+    <string name="home_packages_title">Поиск приложений</string>
+    <string name="home_packages_description">Установленные приложения и их packageName</string>
+</resources>
