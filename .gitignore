@@ -66,6 +66,7 @@ captures/
 .idea/other.xml
 .idea/deviceManager.xml
 .idea/runConfigurations/Generate_Baseline_Profile_for_app.xml
+.idea/AndroidProjectSystem.xml
 
 # Kotlin compiler
 .kotlin
