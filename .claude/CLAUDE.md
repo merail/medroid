@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Medroid (`merail.tools.medroid`) is a single-activity Android app of developer/device tools built with Jetpack Compose, Hilt and type-safe Navigation Compose. Kotlin 2.0, AGP 8.7, Gradle 8.9, JDK 17, `minSdk 26`, `compileSdk`/`targetSdk 36`. UI strings and code comments are in Russian.
 
-The target audience is Android developers: quick access to technical device info plus dev utilities missing from stock Settings. Planned tools, priorities and known tech debt are tracked in `ROADMAP.md` (in Russian); check it before starting a new feature and tick items off when done.
+The target audience is Android developers: quick access to technical device info plus dev utilities missing from stock Settings. Planned tools, priorities and known tech debt are tracked in `ROADMAP.md`; check it before starting a new feature and tick items off when done.
 
 ## Commands
 
@@ -49,4 +49,4 @@ Conventions that span several files when adding a feature or screen:
 ## Repository notes
 
 - Copying the project from a macOS volume creates AppleDouble `._*` files next to every file. `._*` is not gitignored (`.DS_Store` is), so stage files explicitly instead of `git add .` / `git add -A`, and delete `._*` files if they reappear.
-- `core.autocrlf=true` is set; `gradlew` may show a spurious mode change (755 → 644) on Windows. Don't commit that.
+- `core.autocrlf=true` and `core.filemode=false` are set; `filemode=false` prevents a spurious `gradlew` mode change (755 → 644) on Windows.
