@@ -42,9 +42,15 @@ Conventions that span several files when adding a feature or screen:
 - **Navigation** (same scheme as the sibling WordMe project): each feature's `<Feature>Navigation.kt` holds the `@Serializable data object <Feature>Route`, `fun NavController.navigateTo<Feature>(navOptions: NavOptionsBuilder.() -> Unit = {})` (non-start destinations set `launchSingleTop = true` inside it) and `fun NavGraphBuilder.<feature>Screen(<callbacks>)`. Screens never get a `NavController`: they take lambdas (`onInfoClick`), and `MedroidNavHost` wires them with references like `navigateToInfo = navController::navigateToInfo`, so `home` doesn't depend on feature modules. The start destination is `HomeRoute`; returning is via system back (screens have no top app bar yet). The screen composable and ViewModel are `internal`; ViewModels are `@HiltViewModel` and obtained with `hiltViewModel()`.
 - **Screens** apply `systemBarsPadding()` themselves. `MainActivity` hosts the NavHost in a `Surface` with `colorScheme.background`: the default `surface` color equals the card color `surfaceContainer` in the dark scheme.
 - **New module checklist**: add `include(...)` in `settings.gradle.kts`, copy the plugin/`android {}` block from an existing module of the same kind (`impl` modules need `kotlin.compose`, `kotlin.serialization`, `ksp`, `dagger.hilt`), add `implementation(projects.<feature>.api)` / `.impl` to `app/build.gradle.kts`, register `<feature>Screen()` in `MedroidNavHost`, then add a `ToolItem` to `HomeScreen` with a new `navigateTo<Feature>` callback in `homeScreen(...)` (strings `home_*` live in `home`). Modules are referenced through type-safe project accessors (`projects.info.api`, `TYPESAFE_PROJECT_ACCESSORS` is enabled).
-- **Dependencies** go through `gradle/libs.versions.toml` (Compose versions come from the BOM). Exception: Coil (`io.coil-kt:coil-compose:2.7.0`) is hardcoded in `packages/impl/build.gradle.kts`.
+- **Dependencies** go through `gradle/libs.versions.toml` (Compose versions come from the BOM). App icons are rendered as pre-scaled `Bitmap`s (`Image(bitmap = ...)`), so no image-loading library is needed.
 - Android permissions are declared in the manifest of the impl module that needs them (e.g. `ACCESS_NETWORK_STATE` in `info/impl`), not in `app`.
 - String resources are per-module and prefixed with the feature name (`info_*`).
+
+## Code conventions
+
+- Shared utility helpers become **extension functions in the `core` module** (e.g. `Context.openAppSettings`, `Long.toGb`, `Float.round`), one file per receiver type (`<Type>Ext.kt`).
+- Don't swallow exceptions silently: log caught errors via `ILogger` (`logger.error(TAG, message, e)`).
+- Magic numbers and strings go to named constants: `const val` (top-level or in a `private companion object`).
 
 ## Repository notes
 

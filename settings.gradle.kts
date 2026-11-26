@@ -25,6 +25,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "Medroid"
 
 include(":app")
+include(":core")
 include(":design")
 include(":home")
 include(":info")

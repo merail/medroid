@@ -12,7 +12,7 @@ import merail.tools.info.api.model.NetworkConnectionType
 import javax.inject.Inject
 
 internal class NetworkDataInformer @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ): INetworkDataInformer {
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -46,10 +46,6 @@ internal class NetworkDataInformer @Inject constructor(
             } else {
                 ""
             }
-        }
-
-        override fun onLost(network: Network) {
-            super.onLost(network)
         }
     }
 

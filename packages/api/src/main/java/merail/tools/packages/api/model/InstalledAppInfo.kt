@@ -1,9 +1,9 @@
 package merail.tools.packages.api.model
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 
 data class InstalledAppInfo(
     val appName: String,
     val packageName: String,
-    val icon: Drawable,
+    val icon: Bitmap?,
 )

@@ -35,8 +35,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
-
-    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.androidx.core.ktx)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
@@ -46,4 +45,5 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(projects.packages.api)
+    implementation(projects.core)
 }

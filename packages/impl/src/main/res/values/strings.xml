@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="packages_search_placeholder">Введите название или packageName</string>
+    <string name="packages_app_details_not_found">Приложение не\u00A0найдено</string>
+    <string name="packages_app_details_settings">Настройки</string>
+    <string name="packages_app_details_share_apk">Поделиться APK</string>
+    <string name="packages_app_details_copy">Скопировать</string>
+    <string name="packages_app_details_adb">ADB-команды</string>
+    <string name="packages_app_details_adb_path">Путь к APK</string>
+    <string name="packages_app_details_adb_clear">Очистить данные</string>
+    <string name="packages_app_details_adb_uninstall">Удалить (сохранив данные)</string>
+    <string name="packages_app_details_adb_start">Запустить экран</string>
+    <string name="packages_app_details_adb_dump">Дамп пакета</string>
+    <string name="packages_app_details_signatures">Подписи</string>
+    <string name="packages_app_details_sha1">SHA-1</string>
+    <string name="packages_app_details_sha256">SHA-256</string>
+    <string name="packages_app_details_version">Версия</string>
+    <string name="packages_app_details_version_name">versionName: %1$s</string>
+    <string name="packages_app_details_version_code">versionCode: %1$d</string>
+    <string name="packages_app_details_min_sdk">minSdk: %1$d</string>
+    <string name="packages_app_details_target_sdk">targetSdk: %1$d</string>
+    <string name="packages_app_details_debuggable">debuggable: %1$s</string>
+    <string name="packages_app_details_yes">да</string>
+    <string name="packages_app_details_no">нет</string>
+    <string name="packages_app_details_install">Установка</string>
+    <string name="packages_app_details_install_source">Источник: %1$s</string>
+    <string name="packages_app_details_first_install">Установлено: %1$s</string>
+    <string name="packages_app_details_last_update">Обновлено: %1$s</string>
+    <string name="packages_app_details_unknown">неизвестно</string>
+    <string name="packages_app_details_permissions">Разрешения</string>
+    <string name="packages_app_details_no_permissions">Разрешений нет</string>
+    <string name="packages_app_details_permission_granted">выдано</string>
+    <string name="packages_app_details_permission_denied">не выдано</string>
+    <string name="packages_app_details_permission_unknown">неизвестно</string>
+</resources>

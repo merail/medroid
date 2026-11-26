@@ -9,6 +9,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object PackagesRoute
 
+@Serializable
+data class AppDetailsRoute(
+    val packageName: String,
+)
+
 fun NavController.navigateToPackages(
     navOptions: NavOptionsBuilder.() -> Unit = {},
 ) {
@@ -21,8 +26,31 @@ fun NavController.navigateToPackages(
     )
 }
 
-fun NavGraphBuilder.packagesScreen() {
+fun NavController.navigateToAppDetails(
+    packageName: String,
+    navOptions: NavOptionsBuilder.() -> Unit = {},
+) {
+    navigate(
+        route = AppDetailsRoute(packageName),
+        builder = {
+            launchSingleTop = true
+            navOptions()
+        },
+    )
+}
+
+fun NavGraphBuilder.packagesScreen(
+    onAppClick: (String) -> Unit,
+) {
     composable<PackagesRoute> {
-        PackagesScreen()
+        PackagesScreen(
+            onAppClick = onAppClick,
+        )
+    }
+}
+
+fun NavGraphBuilder.appDetailsScreen() {
+    composable<AppDetailsRoute> {
+        AppDetailsScreen()
     }
 }

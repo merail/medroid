@@ -21,7 +21,7 @@ internal class OsDataInformer @Inject constructor(): IOsDataInformer {
         else -> AndroidVersionType.UNKNOWN
     }
 
-    override fun getPatchLevel() = Build.VERSION.SECURITY_PATCH
+    override fun getPatchLevel(): String = Build.VERSION.SECURITY_PATCH
 
-    override fun getBuildId() = Build.ID
+    override fun getBuildId(): String = Build.ID
 }

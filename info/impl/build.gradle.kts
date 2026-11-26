@@ -45,4 +45,5 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(projects.info.api)
+    implementation(projects.core)
 }

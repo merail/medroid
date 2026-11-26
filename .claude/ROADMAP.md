@@ -7,8 +7,11 @@ Each utility is a separate pair of `<feature>/api` + `<feature>/impl` modules (s
 ## Proposed order
 
 1. ~~Home screen with navigation~~ — done
-2. Developer-mode toggles
-3. App details (signatures, versions, permissions)
+2. App details (evolution of `packages`)
+3. Dev toolbox (new module)
+4. Network diagnostics (new module)
+5. Device information (evolution of `info`)
+6. Wireless debugging (dev build only — not publishable in RuStore)
 
 ## 1. Home screen and navigation
 
@@ -16,7 +19,45 @@ Each utility is a separate pair of `<feature>/api` + `<feature>/impl` modules (s
 - [x] Navigation to "Device information" and "App search"
 - [ ] "Back" button in the tools screen header (currently only system back)
 
-## 2. Developer-mode toggles (new module)
+## 2. App details (evolution of `packages`)
+
+- [x] SHA-1 / SHA-256 of the signing certificate. `GET_SIGNING_CERTIFICATES` from API 28; with `minSdk 26`, API 26–27 need a fallback to `GET_SIGNATURES`
+- [x] `versionName` / `versionCode`, `minSdk` / `targetSdk`, debuggable flag
+- [x] Install source (`getInstallSourceInfo` from API 30, earlier `getInstallerPackageName`), install and update dates
+- [x] Permission list with a mark for which are granted
+- [x] "Open app settings", "Share APK" buttons
+- [x] ADB command generator (`pm path`, `pm clear`, `pm uninstall -k`, `am start`, `dumpsys package`) with a "copy" button
+- [ ] Filters: user / system / debuggable-only
+
+## 3. Dev toolbox (new module)
+
+Offline utilities with no permissions (clipboard only); gives the RuStore build standalone value:
+
+- [ ] base64 / MD5 / SHA-1 / SHA-256 encode + decode
+- [ ] JSON formatter / validator, YAML ↔ JSON, JWT decoder
+- [ ] regex tester with match highlighting
+- [ ] UUID / random string generator
+- [ ] color converter (HEX ↔ RGB ↔ HSL)
+- [ ] epoch ↔ date, unit converters (px↔dp, bytes)
+
+## 4. Network diagnostics (new module)
+
+Only `INTERNET` (Safe). Full SSID/BSSID would need location (`ACCESS_FINE_LOCATION`, Sensitive) — skip it.
+
+- [ ] ping (ICMP or TCP ping), traceroute
+- [ ] port scan (TCP connect), DNS lookup (A/AAAA/MX/TXT), whois
+- [ ] current network: IP, gateway, DNS servers, DHCP server, link speed, Wi-Fi band/channel, signal level
+
+## 5. Device information (evolution of `info`)
+
+- [ ] "Copy all as text" — for pasting into a bug report
+- [ ] Current window size class, insets, display cutout (for adaptive layout)
+- [ ] WebView and Google Play Services versions
+- [ ] Hardware features (`FEATURE_*`), sensors, media codecs, OpenGL ES / Vulkan versions
+
+## 6. Wireless debugging (new module, dev build only)
+
+> **Distribution (RuStore moderation, 2026-11-25):** wireless debugging writes `Settings.Global` and needs `WRITE_SECURE_SETTINGS`, which RuStore lists as **Prohibited** and auto-rejects. So this feature cannot ship in the RuStore build: the RuStore version keeps only the publishable features, and wireless debugging ships in a separate direct-APK build (e.g. GitHub Releases) for developers who already use adb.
 
 Require `android.permission.WRITE_SECURE_SETTINGS`. A normal app can't be granted it, but a developer has adb, and the permission is granted once (it survives reboots and updates, and is reset when the app is uninstalled):
 
@@ -52,29 +93,8 @@ Limitations:
 - If the router blocks mDNS (client isolation), Studio won't find the phone by itself: you're left with `adb connect ip:port`, and the port is visible on the wireless-debugging screen
 - After uninstalling the app, `WRITE_SECURE_SETTINGS` is lost; running from Studio is an update, so the permission is kept
 
-### Other toggles
-
-- [ ] Animation scale, all three at once: `WINDOW_ANIMATION_SCALE`, `TRANSITION_ANIMATION_SCALE`, `ANIMATOR_DURATION_SCALE` (turn off for UI tests, slow down for debugging transitions)
-- [ ] "Keep screen on while charging": `STAY_ON_WHILE_PLUGGED_IN`
-
-## 3. App details (evolution of `packages`)
-
-- [ ] SHA-1 / SHA-256 of the signing certificate (for Firebase, Google Sign-In, Maps). `GET_SIGNING_CERTIFICATES` from API 28; with `minSdk 26`, API 26–27 need a fallback to `GET_SIGNATURES`
-- [ ] `versionName` / `versionCode`, `minSdk` / `targetSdk`, debuggable flag
-- [ ] Install source (`getInstallSourceInfo` from API 30, earlier `getInstallerPackageName`), install and update dates
-- [ ] Permission list with a mark for which are granted
-- [ ] "Open app settings", "Share APK" buttons
-- [ ] Filters: user / system / debuggable-only
-
-## 4. Device information (evolution of `info`)
-
-- [ ] "Copy all as text" — for pasting into a bug report
-- [ ] Current window size class, insets, display cutout (for adaptive layout)
-- [ ] WebView and Google Play Services versions
-- [ ] Hardware features (`FEATURE_*`), sensors, media codecs, OpenGL ES / Vulkan versions
-
 ## Technical debt
 
-- [ ] Remove the debug `Log.d("AAAAAAAAAAAA", ...)` from `PackagesViewModel.search()` — it fires for every app on every search
+- [x] Remove the debug `Log.d("AAAAAAAAAAAA", ...)` from `PackagesViewModel.search()` — it fires for every app on every search
 - [ ] Add `._*` to `.gitignore` (files appear when copying the project from macOS)
 - [x] `Scaffold` in `MainActivity` returned an unused `innerPadding`: replaced with `Surface`, as in WordMe

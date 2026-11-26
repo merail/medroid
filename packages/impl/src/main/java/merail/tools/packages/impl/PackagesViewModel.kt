@@ -1,39 +1,87 @@
 package merail.tools.packages.impl
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import merail.tools.packages.api.IPackagesRepository
+import merail.tools.packages.api.model.InstalledAppInfo
 import javax.inject.Inject
 
 @HiltViewModel
 internal class PackagesViewModel @Inject constructor(
-    packagesRepository: IPackagesRepository,
+    private val packagesRepository: IPackagesRepository,
 ) : ViewModel() {
 
-    private val allApps = packagesRepository.getInstalledApps()
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
-    val searchedApps = MutableStateFlow(allApps)
+    private val _allApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
 
-    fun search(query: String) {
-        searchedApps.value = if (query.isBlank()) {
-            allApps
-        } else {
-            val q = query.lowercase()
-            allApps.filter { app ->
-                val name = app.appName.lowercase()
-                val pkg = app.packageName.lowercase()
+    private val _searchedApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
+    val searchedApps: StateFlow<List<InstalledAppInfo>> = _searchedApps
 
-                Log.d("AAAAAAAAAAAA", (similarity(name, q)).toString())
+    private var currentQuery = ""
 
-                name.contains(q) || pkg.contains(q)
-                        || similarity(name, q) >= 0.7
-                        || similarity(pkg, q) >= 0.7
+    private val loadedIcons = mutableSetOf<String>()
+
+    init {
+        viewModelScope.launch {
+            val apps = withContext(Dispatchers.IO) {
+                packagesRepository.getInstalledApps()
             }
+            _allApps.value = apps
+            _searchedApps.value = filter(currentQuery)
+            _isLoading.value = false
         }
     }
 
+    fun search(query: String) {
+        currentQuery = query
+        _searchedApps.value = filter(query)
+    }
+
+    fun loadIcons(packageNames: List<String>) {
+        val toLoad = packageNames
+            .filter { it !in loadedIcons }
+            .distinct()
+
+        if (toLoad.isEmpty()) return
+
+        loadedIcons += toLoad
+
+        viewModelScope.launch {
+            val icons = withContext(Dispatchers.IO) {
+                toLoad.associateWith { packagesRepository.getAppIcon(it) }
+            }
+
+            val updated = _allApps.value.map { app ->
+                icons[app.packageName]?.let { icon -> app.copy(icon = icon) } ?: app
+            }
+            _allApps.value = updated
+            _searchedApps.value = filter(currentQuery)
+        }
+    }
+
+    private fun filter(query: String): List<InstalledAppInfo> {
+        if (query.isBlank()) {
+            return _allApps.value
+        }
+
+        val q = query.lowercase()
+        return _allApps.value.filter { app ->
+            val name = app.appName.lowercase()
+            val pkg = app.packageName.lowercase()
+
+            name.contains(q) || pkg.contains(q)
+                    || similarity(name, q) >= 0.7
+                    || similarity(pkg, q) >= 0.7
+        }
+    }
 
     private fun similarity(a: String, b: String): Double {
         val distance = levenshtein(a, b)
@@ -55,7 +103,7 @@ internal class PackagesViewModel @Inject constructor(
                 dp[i][j] = minOf(
                     dp[i - 1][j] + 1,
                     dp[i][j - 1] + 1,
-                    dp[i - 1][j - 1] + cost
+                    dp[i - 1][j - 1] + cost,
                 )
             }
         }

@@ -8,6 +8,8 @@ import merail.tools.home.HomeRoute
 import merail.tools.home.homeScreen
 import merail.tools.info.impl.infoScreen
 import merail.tools.info.impl.navigateToInfo
+import merail.tools.packages.impl.appDetailsScreen
+import merail.tools.packages.impl.navigateToAppDetails
 import merail.tools.packages.impl.navigateToPackages
 import merail.tools.packages.impl.packagesScreen
 
@@ -28,6 +30,12 @@ fun MedroidNavHost(
 
         infoScreen()
 
-        packagesScreen()
+        packagesScreen(
+            onAppClick = { packageName ->
+                navController.navigateToAppDetails(packageName)
+            },
+        )
+
+        appDetailsScreen()
     }
 }
