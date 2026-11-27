@@ -28,14 +28,15 @@ fun MedroidNavHost(
             navigateToPackages = navController::navigateToPackages,
         )
 
-        infoScreen()
+        infoScreen(onBack = navController::navigateUp)
 
         packagesScreen(
+            onBack = navController::navigateUp,
             onAppClick = { packageName ->
                 navController.navigateToAppDetails(packageName)
             },
         )
 
-        appDetailsScreen()
+        appDetailsScreen(onBack = navController::navigateUp)
     }
 }

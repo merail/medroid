@@ -27,11 +27,13 @@ internal class PackagesRepository @Inject constructor(
     private val packageManager = context.packageManager
 
     override fun getInstalledApps(): List<InstalledAppInfo> {
-        return packageManager.getInstalledApplications(PackageManager.GET_META_DATA).map {
+        return packageManager.getInstalledApplications(PackageManager.GET_META_DATA).map { info ->
             InstalledAppInfo(
-                appName = packageManager.getApplicationLabel(it).toString(),
-                packageName = it.packageName,
+                appName = packageManager.getApplicationLabel(info).toString(),
+                packageName = info.packageName,
                 icon = null,
+                isSystemApp = info.flags and ApplicationInfo.FLAG_SYSTEM != 0,
+                debuggable = info.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             )
         }
     }

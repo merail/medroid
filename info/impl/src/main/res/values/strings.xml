@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="info_title">Информация об\u00A0устройстве</string>
+    <string name="info_back">Назад</string>
+    <string name="info_collapse">Свернуть</string>
+    <string name="info_expand">Развернуть</string>
     <string name="info_display_title">Информация об\u00A0экране</string>
     <string name="info_resolution_px">Разрешение (px): %1$s x\u00A0%2$s</string>
     <string name="info_resolution_dp">Разрешение (dp): %1$s x\u00A0%2$s</string>

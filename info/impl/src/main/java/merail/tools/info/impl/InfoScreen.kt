@@ -11,14 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 internal fun InfoScreen(
+    onBack: () -> Unit,
     viewModel: InfoViewModel = hiltViewModel<InfoViewModel>(),
 ) {
     LazyColumn(
@@ -46,16 +50,30 @@ internal fun InfoScreen(
             .fillMaxSize(),
     ) {
         item {
-            Text(
-                text = stringResource(R.string.info_title),
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                textAlign = TextAlign.Center,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-            )
+                    .padding(vertical = 8.dp),
+            ) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.info_back),
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.info_title),
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f),
+                )
+
+                Spacer(modifier = Modifier.size(48.dp))
+            }
         }
 
         item {
@@ -348,11 +366,9 @@ private fun ExpandableItem(
                 } else {
                     Icons.Default.ExpandMore
                 },
-                contentDescription = if (expanded) {
-                    "Свернуть"
-                } else {
-                    "Развернуть"
-                },
+                contentDescription = stringResource(
+                    if (expanded) R.string.info_collapse else R.string.info_expand
+                ),
             )
         }
 

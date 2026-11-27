@@ -1,8 +1,11 @@
 package merail.tools.packages.impl
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,9 +21,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -47,18 +54,20 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import merail.tools.packages.api.model.InstalledAppInfo
 import kotlin.time.Duration.Companion.milliseconds
 
-private const val LEADING_ITEM_COUNT = 3
+private const val LEADING_ITEM_COUNT = 4
 private const val PREFETCH = 30
 private const val PREFETCH_DEBOUNCE_MS = 100L
 
 @OptIn(FlowPreview::class)
 @Composable
 internal fun PackagesScreen(
+    onBack: () -> Unit,
     onAppClick: (String) -> Unit,
     viewModel: PackagesViewModel = hiltViewModel<PackagesViewModel>(),
 ) {
     val searchApps by viewModel.searchedApps.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val selectedFilter by viewModel.selectedFilter.collectAsState()
 
     var query by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
@@ -92,14 +101,28 @@ internal fun PackagesScreen(
             .fillMaxSize(),
     ) {
         item {
-            Text(
-                text = "Поиск приложений",
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-            )
+                    .padding(vertical = 8.dp),
+            ) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.packages_back),
+                    )
+                }
+
+                Text(
+                    text = "Поиск приложений",
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f),
+                )
+
+                Spacer(modifier = Modifier.size(48.dp))
+            }
         }
 
         item {
@@ -127,6 +150,13 @@ internal fun PackagesScreen(
                         horizontal = 12.dp,
                     )
                     .fillMaxWidth(),
+            )
+        }
+
+        item {
+            AppFilterRow(
+                selectedFilter = selectedFilter,
+                onFilterSelected = viewModel::setFilter,
             )
         }
 
@@ -213,4 +243,34 @@ private fun AppListItem(
             )
         }
     }
+}
+
+@Composable
+private fun AppFilterRow(
+    selectedFilter: AppFilter,
+    onFilterSelected: (AppFilter) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 12.dp),
+    ) {
+        AppFilter.entries.forEach { filter ->
+            FilterChip(
+                selected = filter == selectedFilter,
+                onClick = { onFilterSelected(filter) },
+                label = { Text(text = stringResource(filter.labelRes())) },
+                modifier = Modifier.padding(end = 8.dp),
+            )
+        }
+    }
+}
+
+@StringRes
+private fun AppFilter.labelRes(): Int = when (this) {
+    AppFilter.ALL -> R.string.packages_filter_all
+    AppFilter.USER -> R.string.packages_filter_user
+    AppFilter.SYSTEM -> R.string.packages_filter_system
+    AppFilter.DEBUGGABLE -> R.string.packages_filter_debuggable
 }

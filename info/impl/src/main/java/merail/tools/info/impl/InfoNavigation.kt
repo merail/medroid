@@ -21,8 +21,10 @@ fun NavController.navigateToInfo(
     )
 }
 
-fun NavGraphBuilder.infoScreen() {
+fun NavGraphBuilder.infoScreen(
+    onBack: () -> Unit,
+) {
     composable<InfoRoute> {
-        InfoScreen()
+        InfoScreen(onBack = onBack)
     }
 }

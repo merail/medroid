@@ -40,17 +40,21 @@ fun NavController.navigateToAppDetails(
 }
 
 fun NavGraphBuilder.packagesScreen(
+    onBack: () -> Unit,
     onAppClick: (String) -> Unit,
 ) {
     composable<PackagesRoute> {
         PackagesScreen(
+            onBack = onBack,
             onAppClick = onAppClick,
         )
     }
 }
 
-fun NavGraphBuilder.appDetailsScreen() {
+fun NavGraphBuilder.appDetailsScreen(
+    onBack: () -> Unit,
+) {
     composable<AppDetailsRoute> {
-        AppDetailsScreen()
+        AppDetailsScreen(onBack = onBack)
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import merail.tools.info.api.IDeviceDataInformer
 import merail.tools.info.api.IDisplayDataInformer
@@ -45,13 +46,13 @@ internal class InfoViewModel @Inject constructor(
     val totalStorage = deviceDataInformer.getTotalStorage()
 
     private val _isConnected = MutableStateFlow(false)
-    val isConnected: StateFlow<Boolean> = _isConnected
+    val isConnected: StateFlow<Boolean> = _isConnected.asStateFlow()
 
     private val _networkConnection = MutableStateFlow(NetworkConnectionType.NONE)
-    val networkConnection = _networkConnection
+    val networkConnection: StateFlow<NetworkConnectionType> = _networkConnection.asStateFlow()
 
     private val _ipAddress = MutableStateFlow("")
-    val ipAddress = _ipAddress
+    val ipAddress: StateFlow<String> = _ipAddress.asStateFlow()
 
     init {
         networkDataInformer.startMonitoring()

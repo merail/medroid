@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import merail.tools.packages.api.IPackagesRepository
@@ -18,14 +19,18 @@ internal class PackagesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     private val _allApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
 
     private val _searchedApps = MutableStateFlow<List<InstalledAppInfo>>(emptyList())
-    val searchedApps: StateFlow<List<InstalledAppInfo>> = _searchedApps
+    val searchedApps: StateFlow<List<InstalledAppInfo>> = _searchedApps.asStateFlow()
+
+    private val _selectedFilter = MutableStateFlow(AppFilter.ALL)
+    val selectedFilter: StateFlow<AppFilter> = _selectedFilter.asStateFlow()
 
     private var currentQuery = ""
+    private var currentFilter = AppFilter.ALL
 
     private val loadedIcons = mutableSetOf<String>()
 
@@ -35,14 +40,20 @@ internal class PackagesViewModel @Inject constructor(
                 packagesRepository.getInstalledApps()
             }
             _allApps.value = apps
-            _searchedApps.value = filter(currentQuery)
+            _searchedApps.value = filter()
             _isLoading.value = false
         }
     }
 
     fun search(query: String) {
         currentQuery = query
-        _searchedApps.value = filter(query)
+        _searchedApps.value = filter()
+    }
+
+    fun setFilter(filter: AppFilter) {
+        currentFilter = filter
+        _selectedFilter.value = filter
+        _searchedApps.value = filter()
     }
 
     fun loadIcons(packageNames: List<String>) {
@@ -63,17 +74,24 @@ internal class PackagesViewModel @Inject constructor(
                 icons[app.packageName]?.let { icon -> app.copy(icon = icon) } ?: app
             }
             _allApps.value = updated
-            _searchedApps.value = filter(currentQuery)
+            _searchedApps.value = filter()
         }
     }
 
-    private fun filter(query: String): List<InstalledAppInfo> {
-        if (query.isBlank()) {
-            return _allApps.value
+    private fun filter(): List<InstalledAppInfo> {
+        val filtered = when (currentFilter) {
+            AppFilter.ALL -> _allApps.value
+            AppFilter.USER -> _allApps.value.filter { !it.isSystemApp }
+            AppFilter.SYSTEM -> _allApps.value.filter { it.isSystemApp }
+            AppFilter.DEBUGGABLE -> _allApps.value.filter { it.debuggable }
         }
 
-        val q = query.lowercase()
-        return _allApps.value.filter { app ->
+        if (currentQuery.isBlank()) {
+            return filtered
+        }
+
+        val q = currentQuery.lowercase()
+        return filtered.filter { app ->
             val name = app.appName.lowercase()
             val pkg = app.packageName.lowercase()
 

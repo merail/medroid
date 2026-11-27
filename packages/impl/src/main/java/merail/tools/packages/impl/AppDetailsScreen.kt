@@ -15,8 +15,12 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -48,6 +52,7 @@ private const val ADB_DUMPSYS_PACKAGE = "adb shell dumpsys package %s"
 
 @Composable
 internal fun AppDetailsScreen(
+    onBack: () -> Unit,
     viewModel: AppDetailsViewModel = hiltViewModel<AppDetailsViewModel>(),
 ) {
     val appDetails = viewModel.appDetails
@@ -60,6 +65,12 @@ internal fun AppDetailsScreen(
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                BackButton(onBack)
+            }
+
             Text(
                 text = stringResource(R.string.packages_app_details_not_found),
                 style = MaterialTheme.typography.titleMedium,
@@ -73,6 +84,8 @@ internal fun AppDetailsScreen(
             .systemBarsPadding()
             .fillMaxSize(),
     ) {
+        item { BackButton(onBack) }
+
         item { AppDetailsHeader(appDetails) }
 
         item {
@@ -93,6 +106,16 @@ internal fun AppDetailsScreen(
         }
 
         item { PermissionsBlock(appDetails) }
+    }
+}
+
+@Composable
+private fun BackButton(onBack: () -> Unit) {
+    IconButton(onClick = onBack) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.packages_back),
+        )
     }
 }
 

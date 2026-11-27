@@ -17,7 +17,7 @@ Each utility is a separate pair of `<feature>/api` + `<feature>/impl` modules (s
 
 - [x] Home screen with the tools list (`home` module, start `HomeRoute`)
 - [x] Navigation to "Device information" and "App search"
-- [ ] "Back" button in the tools screen header (currently only system back)
+- [x] "Back" button in the tools screen header (currently only system back)
 
 ## 2. App details (evolution of `packages`)
 
@@ -27,7 +27,7 @@ Each utility is a separate pair of `<feature>/api` + `<feature>/impl` modules (s
 - [x] Permission list with a mark for which are granted
 - [x] "Open app settings", "Share APK" buttons
 - [x] ADB command generator (`pm path`, `pm clear`, `pm uninstall -k`, `am start`, `dumpsys package`) with a "copy" button
-- [ ] Filters: user / system / debuggable-only
+- [x] Filters: user / system / debuggable-only
 
 ## 3. Dev toolbox (new module)
 
@@ -96,5 +96,5 @@ Limitations:
 ## Technical debt
 
 - [x] Remove the debug `Log.d("AAAAAAAAAAAA", ...)` from `PackagesViewModel.search()` — it fires for every app on every search
-- [ ] Add `._*` to `.gitignore` (files appear when copying the project from macOS)
+- [x] AppleDouble `._*` files: remove leftovers only, no `.gitignore` entry (decision 2026-11-27; none present at the time)
 - [x] `Scaffold` in `MainActivity` returned an unused `innerPadding`: replaced with `Surface`, as in WordMe
